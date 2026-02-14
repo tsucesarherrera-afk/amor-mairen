@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Amor Mairen</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            overflow-x: hidden;
+        }
+        
+        /* Página de Bienvenida */
+        #welcome-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 50%, #ffd4e5 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        #welcome-page.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
+        }
+        
+        /* Decoración de flores flotantes */
+        .floating-flower {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+        
+        .flower-1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .flower-2 { top: 20%; right: 15%; animation-delay: 1s; }
+        .flower-3 { bottom: 30%; left: 8%; animation-delay: 2s; }
+        .flower-4 { top: 60%; right: 10%; animation-delay: 3s; }
+        .flower-5 { bottom: 20%; right: 20%; animation-delay: 4s; }
+        .flower-6 { top: 40%; left: 5%; animation-delay: 5s; }
+        
+        /* Corazones flotantes */
+        .floating-heart {
+            position: absolute;
+            color: #e91e63;
+            font-size: 1.5rem;
+            animation: heartbeat 2s ease-in-out infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .heart-1 { top: 15%; left: 20%; animation-delay: 0.5s; }
+        .heart-2 { top: 25%; right: 25%; animation-delay: 1.5s; }
+        .heart-3 { bottom: 25%; left: 25%; animation-delay: 2.5s; }
+        .heart-4 { top: 70%; right: 30%; animation-delay: 3.5s; }
+        
+        .welcome-content {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+        }
+        
+        .welcome-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #c2185b;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: fadeInDown 1s ease;
+        }
+        
+        .welcome-subtitle {
+            font-size: 1.5rem;
+            color: #880e4f;
+            margin-bottom: 3rem;
+            font-style: italic;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .enter-btn {
+            background: linear-gradient(45deg, #e91e63, #f06292);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.3);
+            transition: all 0.3s ease;
+            font-family: 'Playfair Display', serif;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(233, 30, 99, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(233, 30, 99, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(233, 30, 99, 0); }
+        }
+        
+        .enter-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(233, 30, 99, 0.4);
+        }
+        
+        .enter-btn::before {
+            content: '❤';
+            margin-right: 10px;
+        }
+        
+        .enter-btn::after {
+            content: '❤';
+            margin-left: 10px;
+        }
+        
+        /* Galería Principal */
+        #gallery-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2c0000 0%, #4a0000 30%, #720000 60%, #8b0000 100%);
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+        
+        #gallery-page.active {
+            display: block;
+            animation: fadeIn 1s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Fondo decorativo de rosas */
+        .rose-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .rose-decoration {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.15;
+            animation: roseFloat 8s ease-in-out infinite;
+        }
+        
+        @keyframes roseFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+        
+        .rose-1 { top: 5%; left: 5%; animation-delay: 0s; }
+        .rose-2 { top: 10%; right: 10%; animation-delay: 2s; }
+        .rose-3 { bottom: 20%; left: 8%; animation-delay: 4s; }
+        .rose-4 { top: 50%; right: 5%; animation-delay: 6s; }
+        .rose-5 { bottom: 10%; right: 15%; animation-delay: 1s; }
+        .rose-6 { top: 30%; left: 3%; animation-delay: 3s; }
+        .rose-7 { bottom: 40%; right: 8%; animation-delay: 5s; }
+        .rose-8 { top: 70%; left: 10%; animation-delay: 7s; }
+        
+        /* Pétalos cayendo */
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #ff69b4 0%, #dc143c 100%);
+            border-radius: 50% 0 50% 50%;
+            opacity: 0.6;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg); }
+        }
+        
+        /* Contenido de la galería */
+        .gallery-content {
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Poema */
+        .poem-section {
+            text-align: center;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .poem-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .poem-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            color: #fff;
+            line-height: 2;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Contenedor de imágenes */
+        .image-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 1rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 15px;
+            background: #000;
+        }
+        
+        .gallery-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            background: #1a0000;
+        }
+        
+        .gallery-image.active {
+            opacity: 1;
+        }
+        
+        /* Controles */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            padding: 1rem;
+        }
+        
+        .control-btn {
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #8b0000;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+            background: linear-gradient(145deg, #ff69b4, #e91e63);
+            color: white;
+        }
+        
+        /* Indicador de progreso */
+        .progress-indicator {
+            text-align: center;
+            color: #ffd700;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        /* Sección de subida de imágenes */
+        .upload-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        
+        .upload-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-area {
+            border: 3px dashed rgba(255, 215, 0, 0.5);
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .upload-area:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: #ffd700;
+        }
+        
+        .upload-area.dragover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-hint {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        
+        #file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(45deg, #e91e63, #f06292);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(233, 30, 99, 0.4);
+        }
+        
+        /* Lista de imágenes cargadas */
+        .image-list {
+            margin-top: 1.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .image-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 10px;
+            color: #fff;
+        }
+        
+        .image-item button {
+            background: #dc143c;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-title { font-size: 2.5rem; }
+            .image-wrapper { height: 300px; }
+            .poem-text { font-size: 1.1rem; }
+            .controls { gap: 1rem; }
+            .control-btn { width: 50px; height: 50px; font-size: 1.2rem; }
+            .play-btn { width: 70px; height: 70px; font-size: 1.8rem; }
+        }
+        
+        /* Efecto de brillo */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 3s linear infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Página de Bienvenida -->
+    <div id="welcome-page">
+        <!-- Flores decorativas -->
+        <div class="floating-flower flower-1">🌸</div>
+        <div class="floating-flower flower-2">🌺</div>
+        <div class="floating-flower flower-3">🌷</div>
+        <div class="floating-flower flower-4">🌹</div>
+        <div class="floating-flower flower-5">💐</div>
+        <div class="floating-flower flower-6">🌻</div>
+        
+        <!-- Corazones -->
+        <div class="floating-heart heart-1">❤️</div>
+        <div class="floating-heart heart-2">💕</div>
+        <div class="floating-heart heart-3">💖</div>
+        <div class="floating-heart heart-4">💗</div>
+        
+        <div class="welcome-content">
+            <h1 class="welcome-title">Bienvenida Mi Amor</h1>
+            <p class="welcome-subtitle">Un espacio dedicado a nuestra historia de amor</p>
+            <button class="enter-btn" onclick="enterGallery()">Entrar al Jardín de Nuestro Amor</button>
+        </div>
+    </div>
+    
+    <!-- Página de Galería -->
+    <div id="gallery-page">
+        <!-- Fondo de rosas -->
+        <div class="rose-bg">
+            <div class="rose-decoration rose-1">🌹</div>
+            <div class="rose-decoration rose-2">🥀</div>
+            <div class="rose-decoration rose-3">🌹</div>
+            <div class="rose-decoration rose-4">🥀</div>
+            <div class="rose-decoration rose-5">🌹</div>
+            <div class="rose-decoration rose-6">🥀</div>
+            <div class="rose-decoration rose-7">🌹</div>
+            <div class="rose-decoration rose-8">🥀</div>
+        </div>
+        
+        <!-- Pétalos animados -->
+        <div id="petals-container"></div>
+        
+        <div class="gallery-content">
+            <!-- Poema -->
+            <div class="poem-section">
+                <h2 class="poem-title">Para Mairen, Mi Eterno Amor</h2>
+                <p class="poem-text">
+                    En cada latido de mi corazón,<br>
+                    encuentro tu nombre grabado con pasión.<br>
+                    Eres la luz que ilumina mi caminar,<br>
+                    la razón por la que quiero despertar.<br><br>
+                    Como las rosas que nunca dejan de florecer,<br>
+                    mi amor por ti solo puede crecer.<br>
+                    Mairen, mi esposa, mi compañera, mi todo,<br>
+                    contigo a mi lado, mi mundo está completo.
+                </p>
+            </div>
+            
+            <!-- Galería de Imágenes -->
+            <div class="image-container">
+                <div class="image-wrapper" id="image-wrapper">
+                    <!-- Las imágenes se cargarán dinámicamente aquí -->
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #fff; font-family: 'Dancing Script', cursive; font-size: 1.5rem;">
+                        Carga tus imágenes para comenzar 📸
+                    </div>
+                </div>
+                
+                <div class="progress-indicator" id="progress-indicator">0 / 0 imágenes</div>
+                
+                <!-- Controles -->
+                <div class="controls">
+                    <button class="control-btn" onclick="prevImage()" title="Anterior">◀</button>
+                    <button class="control-btn play-btn" id="play-btn" onclick="togglePlay()" title="Reproducir/Pausar">▶</button>
+                    <button class="control-btn" onclick="nextImage()" title="Siguiente">▶</button>
+                </div>
+            </div>
+            
+            <!-- Sección de Subida -->
+            <div class="upload-section">
+                <h3 class="upload-title">Agregar Más Recuerdos</h3>
+                <div class="upload-area" onclick="document.getElementById('file-input').click()" 
+                     ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Arrastra tus fotos aquí o haz clic para seleccionar</div>
+                    <div class="upload-hint">Soporta JPG, PNG, GIF</div>
+                </div>
+                <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
+                <button class="upload-btn" onclick="document.getElementById('file-input').click()">
+                    Seleccionar Imágenes
+                </button>
+                
+                <div class="image-list" id="image-list"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Variables globales
+        let images = [];
+        let currentIndex = 0;
+        let isPlaying = false;
+        let playInterval = null;
+        const autoplayDelay = 3000; // 3 segundos entre imágenes
+        
+        // Crear pétalos animados
+        function createPetals() {
+            const container = document.getElementById('petals-container');
+            for (let i = 0; i < 20; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                petal.style.animationDelay = Math.random() * 5 + 's';
+                petal.style.opacity = Math.random() * 0.5 + 0.3;
+                container.appendChild(petal);
+            }
+        }
+        
+        // Entrar a la galería
+        function enterGallery() {
+            document.getElementById('welcome-page').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('gallery-page').classList.add('active');
+                createPetals();
+            }, 500);
+        }
+        
+        // Manejar archivos cargados
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        addImage(e.target.result, file.name);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // Agregar imagen a la galería
+        function addImage(src, name) {
+            images.push({ src, name });
+            updateGallery();
+            updateImageList();
+            
+            // Si es la primera imagen, mostrarla
+            if (images.length === 1) {
+                showImage(0);
+            }
+        }
+        
+        // Actualizar la galería visual
+        function updateGallery() {
+            const wrapper = document.getElementById('image-wrapper');
+            wrapper.innerHTML = '';
+            
+            images.forEach((img, index) => {
+                const imgElement = document.createElement('img');
+                imgElement.src = img.src;
+                imgElement.className = 'gallery-image' + (index === currentIndex ? ' active' : '');
+                imgElement.alt = img.name;
+                wrapper.appendChild(imgElement);
+            });
+            
+            updateProgress();
+        }
+        
+        // Actualizar lista de imágenes cargadas
+        function updateImageList() {
+            const list = document.getElementById('image-list');
+            list.innerHTML = '';
+            
+            images.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'image-item';
+                item.innerHTML = `
+                    <span>${img.name}</span>
+                    <button onclick="removeImage(${index})">Eliminar</button>
+                `;
+                list.appendChild(item);
+            });
+        }
+        
+        // Eliminar imagen
+        function removeImage(index) {
+            images.splice(index, 1);
+            if (currentIndex >= images.length) {
+                currentIndex = Math.max(0, images.length - 1);
+            }
+            updateGallery();
+            updateImageList();
+            if (images.length > 0) {
+                showImage(currentIndex);
+            }
+        }
+        
+        // Mostrar imagen específica
+        function showImage(index) {
+            const imgs = document.querySelectorAll('.gallery-image');
+            imgs.forEach((img, i) => {
+                img.classList.toggle('active', i === index);
+            });
+            currentIndex = index;
+            updateProgress();
+        }
+        
+        // Actualizar indicador de progreso
+        function updateProgress() {
+            document.getElementById('progress-indicator').textContent = 
+                images.length > 0 ? `${currentIndex + 1} / ${images.length} imágenes` : 'Sin imágenes';
+        }
+        
+        // Navegación
+        function nextImage() {
+            if (images.length === 0) return;
+            const next = (currentIndex + 1) % images.length;
+            showImage(next);
+        }
+        
+        function prevImage() {
+            if (images.length === 0) return;
+            const prev = (currentIndex - 1 + images.length) % images.length;
+            showImage(prev);
+        }
+        
+        // Reproducción automática
+        function togglePlay() {
+            const btn = document.getElementById('play-btn');
+            
+            if (isPlaying) {
+                clearInterval(playInterval);
+                isPlaying = false;
+                btn.innerHTML = '▶';
+                btn.title = 'Reproducir';
+            } else {
+                if (images.length > 0) {
+                    playInterval = setInterval(nextImage, autoplayDelay);
+                    isPlaying = true;
+                    btn.innerHTML = '⏸';
+                    btn.title = 'Pausar';
+                    // Avanzar inmediatamente si estamos al inicio
+                    if (currentIndex === 0 && images.length > 1) {
+                        nextImage();
+                    }
+                }
+            }
+        }
+        
+        // Manejar drag and drop
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+        
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('dragover');
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        }
+        
+        // Precargar la imagen que subiste como ejemplo
+        window.addEventListener('load', () => {
+            // La imagen que subiste está en /mnt/kimi/upload/1771050538395.jpg
+            // Como no podemos acceder directamente al sistema de archivos desde el navegador,
+            // el usuario necesitará cargarla manualmente o podemos usar una URL de ejemplo
+        });
+    </script>
+</body>
+</html>
