@@ -539,7 +539,7 @@
                 <div class="image-wrapper" id="image-wrapper">
                     <!-- Las imágenes se cargarán dinámicamente aquí -->
                     <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #fff; font-family: 'Dancing Script', cursive; font-size: 1.5rem;">
-                        Carga tus imágenes para comenzar 📸
+                        Cargando recuerdos... 💕
                     </div>
                 </div>
                 
@@ -741,49 +741,58 @@
             handleFiles(e.dataTransfer.files);
         }
         
-// Cargar imágenes automáticamente
-window.addEventListener('load', () => {
-    // Lista tus imágenes aquí con los nombres EXACTOS
-    const misFotos = [
-        '1000169374.jpg',
-        '1771049930783.jpg',
-        '1771050136771.jpg',
-        '1771050538114.jpg',
-        '1771050538154.jpg',
-        '1771050538174.jpg',
-        '1771050538193.jpg',
-        '1771050538213.jpg',
-        '1771050538231.jpg',
-        '1771050538252.jpg',
-        '1771050538273.jpg',
-        '1771050538293.jpg',
-        '1771050538311.jpg',
-        '1771050538329.jpg',
-        '1771050538380.jpg',
-        '1771050538395.jpg',
-        '1771050538409.jpg',
-        '1771050538423.jpg',
-        '1771050538438.jpg',
-        '1771050538453.jpg',
-        '1771050538467.jpg',
-        'IMG_20231014_181043.jpg',
-        'IMG_20240101_123931.jpg',
-        // 'imagenes/foto2.jpg',
-        // 'imagenes/foto3.jpg',
-    ];
-    
-    misFotos.forEach((foto, i) => {
-        fetch(foto)
-            .then(r => {
-                if(r.ok) addImage(foto, 'Foto ' + (i+1));
-                else console.log('No existe: ' + foto);
-            })
-            .catch(e => console.log('Error: ' + foto));
-    });
-});
+        // Cargar imágenes automáticamente desde GitHub
+        window.addEventListener('load', () => {
+            // URL base de tu repositorio (raw)
+            const baseUrl = 'https://raw.githubusercontent.com/tsucesarherrera-afk/amor-mairen/main/imagenes/';
+            
+            // Lista de tus imágenes
+            const misFotos = [
+                '1000169374.jpg',
+                '1771049930783.jpg',
+                '1771050136771.jpg',
+                '1771050538114.jpg',
+                '1771050538154.jpg',
+                '1771050538174.jpg',
+                '1771050538193.jpg',
+                '1771050538213.jpg',
+                '1771050538231.jpg',
+                '1771050538252.jpg',
+                '1771050538273.jpg',
+                '1771050538293.jpg',
+                '1771050538311.jpg',
+                '1771050538329.jpg',
+                '1771050538380.jpg',
+                '1771050538395.jpg',
+                '1771050538409.jpg',
+                '1771050538423.jpg',
+                '1771050538438.jpg',
+                '1771050538453.jpg',
+                '1771050538467.jpg',
+                'IMG_20231014_181043.jpg',
+                'IMG_20240101_123931.jpg',
+            ];
+            
+            // Cargar cada imagen
+            let cargadas = 0;
+            misFotos.forEach((nombre, i) => {
+                const url = baseUrl + nombre;
+                const img = new Image();
+                
+                img.onload = () => {
+                    addImage(url, 'Recuerdo ' + (i + 1));
+                    cargadas++;
+                    console.log('✓ Cargada: ' + nombre);
+                };
+                
+                img.onerror = () => {
+                    console.log('✗ No se pudo cargar: ' + nombre);
+                };
+                
+                // Iniciar carga
+                img.src = url;
+            });
+        });
     </script>
 </body>
-
 </html>
-
-
