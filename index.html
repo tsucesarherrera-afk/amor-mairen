@@ -346,109 +346,13 @@
             font-family: 'Dancing Script', cursive;
         }
         
-        /* Sección de subida de imágenes */
-        .upload-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-top: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: center;
-        }
-        
-        .upload-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2rem;
+        /* Loading indicator */
+        .loading-text {
             color: #ffd700;
-            margin-bottom: 1rem;
-        }
-        
-        .upload-area {
-            border: 3px dashed rgba(255, 215, 0, 0.5);
-            border-radius: 15px;
-            padding: 3rem 2rem;
-            margin: 1rem 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(0, 0, 0, 0.2);
-        }
-        
-        .upload-area:hover {
-            background: rgba(255, 215, 0, 0.1);
-            border-color: #ffd700;
-        }
-        
-        .upload-area.dragover {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: #ffd700;
-            transform: scale(1.02);
-        }
-        
-        .upload-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .upload-text {
-            color: #fff;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .upload-hint {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-        }
-        
-        #file-input {
-            display: none;
-        }
-        
-        .upload-btn {
-            background: linear-gradient(45deg, #e91e63, #f06292);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            margin-top: 1rem;
-            transition: all 0.3s ease;
-            font-family: 'Playfair Display', serif;
-        }
-        
-        .upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(233, 30, 99, 0.4);
-        }
-        
-        /* Lista de imágenes cargadas */
-        .image-list {
-            margin-top: 1.5rem;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        
-        .image-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0.5rem 1rem;
-            margin: 0.5rem 0;
-            border-radius: 10px;
-            color: #fff;
-        }
-        
-        .image-item button {
-            background: #dc143c;
-            color: white;
-            border: none;
-            padding: 0.3rem 0.8rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.8rem;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 2rem;
         }
         
         /* Responsive */
@@ -474,15 +378,6 @@
         @keyframes sparkle {
             0%, 100% { opacity: 0; transform: scale(0); }
             50% { opacity: 1; transform: scale(1); }
-        }
-        
-        /* Loading indicator */
-        .loading-text {
-            color: #ffd700;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.5rem;
-            text-align: center;
-            padding: 2rem;
         }
     </style>
 </head>
@@ -554,24 +449,6 @@
                 
                 <div class="progress-indicator" id="progress-indicator">0 / 0 imágenes</div>
                 
-                <!-- Cont Como las rosas que nunca dejan de florecer,<br>
-                    mi amor por ti solo puede crecer.<br>
-                    Mairen, mi esposa, mi compañera, mi todo,<br>
-                    contigo a mi lado, mi mundo está completo.
-                </p>
-            </div>
-            
-            <!-- Galería de Imágenes -->
-            <div class="image-container">
-                <div class="image-wrapper" id="image-wrapper">
-                    <div class="loading-text" id="loading-text">
-                        Cargando 23 recuerdos... 💕<br>
-                        <small style="font-size: 1rem; opacity: 0.8;">Por favor espera un momento</small>
-                    </div>
-                </div>
-                
-                <div class="progress-indicator" id="progress-indicator">0 / 0 imágenes</div>
-                
                 <!-- Controles -->
                 <div class="controls">
                     <button class="control-btn" onclick="prevImage()" title="Anterior">◀</button>
@@ -579,25 +456,17 @@
                     <button class="control-btn" onclick="nextImage()" title="Siguiente">▶</button>
                 </div>
             </div>
-            
-            <!-- Sección de Subida -->
-            <div class="upload-section">
-                <h3 class="upload-title">Agregar Más Recuerdos</h3>
-                <div class="upload-area" onclick="document.getElementById('file-input').click()" 
-                     ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                    <div class="upload-icon">📁</div>
-                    <div class="upload-text">Arrastra tus fotos aquí o haz clic para seleccionar</div>
-                    <div class="upload-hint">Soporta JPG, PNG, GIF</div>
-                </div>
-                <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
-                <button class="upload-btn" onclick="document.getElementById('file-input').click()">
-                    Seleccionar Imágenes
-                </button>
-                
-                <div class="image-list" id="image-list"></div>
-            </div>
         </div>
     </div>
+    
+    <!-- Música romántica "Te Amo" - Libre de derechos -->
+    <audio id="romantic-music" loop>
+        <!-- Opción 1: Música romántica instrumental de Pixabay -->
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-11454.mp3" type="audio/mpeg">
+        <!-- Opción 2: Si la anterior falla, usar esta de respaldo -->
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Tu navegador no soporta audio HTML5.
+    </audio>
     
     <script>
         // Variables globales
@@ -606,6 +475,7 @@
         let isPlaying = false;
         let playInterval = null;
         const autoplayDelay = 3000;
+        let musicStarted = false;
         
         // Crear pétalos animados
         function createPetals() {
@@ -621,8 +491,21 @@
             }
         }
         
+        // Iniciar música
+        function startMusic() {
+            if (!musicStarted) {
+                const audio = document.getElementById('romantic-music');
+                audio.volume = 0.5; // Volumen medio (50%)
+                audio.play().catch(e => {
+                    console.log('Autoplay bloqueado, la música iniciará con interacción del usuario');
+                });
+                musicStarted = true;
+            }
+        }
+        
         // Entrar a la galería
         function enterGallery() {
+            startMusic(); // Iniciar música al entrar
             document.getElementById('welcome-page').classList.add('hidden');
             setTimeout(() => {
                 document.getElementById('gallery-page').classList.add('active');
@@ -630,24 +513,10 @@
             }, 500);
         }
         
-        // Manejar archivos cargados manualmente
-        function handleFiles(files) {
-            Array.from(files).forEach(file => {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        addImage(e.target.result, file.name);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-        
         // Agregar imagen a la galería
         function addImage(src, name) {
             images.push({ src, name });
             updateGallery();
-            updateImageList();
             
             if (images.length === 1) {
                 showImage(0);
@@ -676,35 +545,6 @@
             });
             
             updateProgress();
-        }
-        
-        // Actualizar lista de imágenes cargadas
-        function updateImageList() {
-            const list = document.getElementById('image-list');
-            list.innerHTML = '';
-            
-            images.forEach((img, index) => {
-                const item = document.createElement('div');
-                item.className = 'image-item';
-                item.innerHTML = `
-                    <span>${img.name}</span>
-                    <button onclick="removeImage(${index})">Eliminar</button>
-                `;
-                list.appendChild(item);
-            });
-        }
-        
-        // Eliminar imagen
-        function removeImage(index) {
-            images.splice(index, 1);
-            if (currentIndex >= images.length) {
-                currentIndex = Math.max(0, images.length - 1);
-            }
-            updateGallery();
-            updateImageList();
-            if (images.length > 0) {
-                showImage(currentIndex);
-            }
         }
         
         // Mostrar imagen específica
@@ -756,22 +596,6 @@
                     }
                 }
             }
-        }
-        
-        // Manejar drag and drop
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.currentTarget.classList.add('dragover');
-        }
-        
-        function handleDragLeave(e) {
-            e.currentTarget.classList.remove('dragover');
-        }
-        
-        function handleDrop(e) {
-            e.preventDefault();
-            e.currentTarget.classList.remove('dragover');
-            handleFiles(e.dataTransfer.files);
         }
         
         // Cargar imágenes automáticamente desde GitHub - UNA POR UNA CON DELAY
@@ -826,7 +650,7 @@
                         
                         img.onerror = () => {
                             if (intentos < reintentos) {
-                                setTimeout(intentarCargar, 1000 * intentos); // Esperar más entre reintentos
+                                setTimeout(intentarCargar, 1000 * intentos);
                             } else {
                                 console.log('✗ Falló después de ' + reintentos + ' intentos: ' + nombre);
                                 fallidas++;
@@ -835,7 +659,7 @@
                             }
                         };
                         
-                        img.src = url + '?t=' + Date.now(); // Evitar caché
+                        img.src = url + '?t=' + Date.now();
                     }
                     
                     intentarCargar();
@@ -854,7 +678,6 @@
                         </small>
                     `;
                     
-                    // Si todas cargaron o fallaron, quitar el mensaje
                     if (cargadas + fallidas === misFotos.length) {
                         setTimeout(() => {
                             if (loadingText) loadingText.style.display = 'none';
@@ -863,11 +686,10 @@
                 }
             }
             
-            // Cargar imágenes UNA POR UNA con delay de 500ms entre cada una
+            // Cargar imágenes UNA POR UNA con delay
             async function cargarTodas() {
                 for (let i = 0; i < misFotos.length; i++) {
                     await cargarImagen(misFotos[i], i);
-                    // Esperar 500ms antes de cargar la siguiente (evita límites de GitHub)
                     if (i < misFotos.length - 1) {
                         await new Promise(r => setTimeout(r, 500));
                     }
@@ -875,9 +697,15 @@
                 console.log('Carga completada. Éxitos: ' + cargadas + ', Fallidas: ' + fallidas);
             }
             
-            // Iniciar carga
             setTimeout(cargarTodas, 1000);
         });
+        
+        // Permitir que el usuario inicie música con clic si el autoplay fue bloqueado
+        document.addEventListener('click', () => {
+            if (!musicStarted) {
+                startMusic();
+            }
+        }, { once: true });
     </script>
 </body>
 </html>
