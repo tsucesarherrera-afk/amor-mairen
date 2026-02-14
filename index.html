@@ -741,9 +741,10 @@
             handleFiles(e.dataTransfer.files);
         }
         
-    // Precargar imágenes desde GitHub
+// Cargar imágenes automáticamente
 window.addEventListener('load', () => {
-    const imagenesPredefinidas = [
+    // Lista tus imágenes aquí con los nombres EXACTOS
+    const misFotos = [
         '1000169374.jpg',
         '1771049930783.jpg',
         '1771050136771.jpg',
@@ -767,22 +768,22 @@ window.addEventListener('load', () => {
         '1771050538467.jpg',
         'IMG_20231014_181043.jpg',
         'IMG_20240101_123931.jpg',
-        
+        // 'imagenes/foto2.jpg',
+        // 'imagenes/foto3.jpg',
     ];
     
-    imagenesPredefinidas.forEach((src, index) => {
-        const img = new Image();
-        img.onload = () => {
-            addImage(src, 'Foto ' + (index + 1));
-        };
-        img.onerror = () => {
-            console.log('No se pudo cargar: ' + src);
-        };
-        img.src = src;
+    misFotos.forEach((foto, i) => {
+        fetch(foto)
+            .then(r => {
+                if(r.ok) addImage(foto, 'Foto ' + (i+1));
+                else console.log('No existe: ' + foto);
+            })
+            .catch(e => console.log('Error: ' + foto));
     });
 });
     </script>
 </body>
 
 </html>
+
 
