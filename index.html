@@ -475,6 +475,15 @@
             0%, 100% { opacity: 0; transform: scale(0); }
             50% { opacity: 1; transform: scale(1); }
         }
+        
+        /* Loading indicator */
+        .loading-text {
+            color: #ffd700;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -537,9 +546,27 @@
             <!-- Galería de Imágenes -->
             <div class="image-container">
                 <div class="image-wrapper" id="image-wrapper">
-                    <!-- Las imágenes se cargarán dinámicamente aquí -->
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #fff; font-family: 'Dancing Script', cursive; font-size: 1.5rem;">
-                        Cargando recuerdos... 💕
+                    <div class="loading-text" id="loading-text">
+                        Cargando 23 recuerdos... 💕<br>
+                        <small style="font-size: 1rem; opacity: 0.8;">Por favor espera un momento</small>
+                    </div>
+                </div>
+                
+                <div class="progress-indicator" id="progress-indicator">0 / 0 imágenes</div>
+                
+                <!-- Cont Como las rosas que nunca dejan de florecer,<br>
+                    mi amor por ti solo puede crecer.<br>
+                    Mairen, mi esposa, mi compañera, mi todo,<br>
+                    contigo a mi lado, mi mundo está completo.
+                </p>
+            </div>
+            
+            <!-- Galería de Imágenes -->
+            <div class="image-container">
+                <div class="image-wrapper" id="image-wrapper">
+                    <div class="loading-text" id="loading-text">
+                        Cargando 23 recuerdos... 💕<br>
+                        <small style="font-size: 1rem; opacity: 0.8;">Por favor espera un momento</small>
                     </div>
                 </div>
                 
@@ -578,7 +605,7 @@
         let currentIndex = 0;
         let isPlaying = false;
         let playInterval = null;
-        const autoplayDelay = 3000; // 3 segundos entre imágenes
+        const autoplayDelay = 3000;
         
         // Crear pétalos animados
         function createPetals() {
@@ -603,7 +630,7 @@
             }, 500);
         }
         
-        // Manejar archivos cargados
+        // Manejar archivos cargados manualmente
         function handleFiles(files) {
             Array.from(files).forEach(file => {
                 if (file.type.startsWith('image/')) {
@@ -622,7 +649,6 @@
             updateGallery();
             updateImageList();
             
-            // Si es la primera imagen, mostrarla
             if (images.length === 1) {
                 showImage(0);
             }
@@ -631,14 +657,22 @@
         // Actualizar la galería visual
         function updateGallery() {
             const wrapper = document.getElementById('image-wrapper');
-            wrapper.innerHTML = '';
+            
+            // Si es la primera imagen, limpiar el loading
+            if (images.length === 1) {
+                wrapper.innerHTML = '';
+            }
             
             images.forEach((img, index) => {
-                const imgElement = document.createElement('img');
-                imgElement.src = img.src;
-                imgElement.className = 'gallery-image' + (index === currentIndex ? ' active' : '');
-                imgElement.alt = img.name;
-                wrapper.appendChild(imgElement);
+                // Solo crear elemento si no existe
+                if (!document.querySelector(`img[data-index="${index}"]`)) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = img.src;
+                    imgElement.className = 'gallery-image' + (index === currentIndex ? ' active' : '');
+                    imgElement.alt = img.name;
+                    imgElement.setAttribute('data-index', index);
+                    wrapper.appendChild(imgElement);
+                }
             });
             
             updateProgress();
@@ -717,7 +751,6 @@
                     isPlaying = true;
                     btn.innerHTML = '⏸';
                     btn.title = 'Pausar';
-                    // Avanzar inmediatamente si estamos al inicio
                     if (currentIndex === 0 && images.length > 1) {
                         nextImage();
                     }
@@ -741,12 +774,10 @@
             handleFiles(e.dataTransfer.files);
         }
         
-        // Cargar imágenes automáticamente desde GitHub
+        // Cargar imágenes automáticamente desde GitHub - UNA POR UNA CON DELAY
         window.addEventListener('load', () => {
-            // URL base de tu repositorio (raw)
             const baseUrl = 'https://raw.githubusercontent.com/tsucesarherrera-afk/amor-mairen/main/imagenes/';
             
-            // Lista de tus imágenes
             const misFotos = [
                 '1000169374.jpg',
                 '1771049930783.jpg',
@@ -773,25 +804,79 @@
                 'IMG_20240101_123931.jpg',
             ];
             
-            // Cargar cada imagen
             let cargadas = 0;
-            misFotos.forEach((nombre, i) => {
-                const url = baseUrl + nombre;
-                const img = new Image();
-                
-                img.onload = () => {
-                    addImage(url, 'Recuerdo ' + (i + 1));
-                    cargadas++;
-                    console.log('✓ Cargada: ' + nombre);
-                };
-                
-                img.onerror = () => {
-                    console.log('✗ No se pudo cargar: ' + nombre);
-                };
-                
-                // Iniciar carga
-                img.src = url;
-            });
+            let fallidas = 0;
+            
+            // Función para cargar imagen con retry
+            function cargarImagen(nombre, index, reintentos = 3) {
+                return new Promise((resolve) => {
+                    const url = baseUrl + nombre;
+                    const img = new Image();
+                    let intentos = 0;
+                    
+                    function intentarCargar() {
+                        intentos++;
+                        
+                        img.onload = () => {
+                            addImage(url, 'Recuerdo ' + (index + 1));
+                            cargadas++;
+                            actualizarLoading();
+                            resolve(true);
+                        };
+                        
+                        img.onerror = () => {
+                            if (intentos < reintentos) {
+                                setTimeout(intentarCargar, 1000 * intentos); // Esperar más entre reintentos
+                            } else {
+                                console.log('✗ Falló después de ' + reintentos + ' intentos: ' + nombre);
+                                fallidas++;
+                                actualizarLoading();
+                                resolve(false);
+                            }
+                        };
+                        
+                        img.src = url + '?t=' + Date.now(); // Evitar caché
+                    }
+                    
+                    intentarCargar();
+                });
+            }
+            
+            // Actualizar texto de loading
+            function actualizarLoading() {
+                const loadingText = document.getElementById('loading-text');
+                if (loadingText) {
+                    loadingText.innerHTML = `
+                        Cargando recuerdos... 💕<br>
+                        <small style="font-size: 1rem; opacity: 0.8;">
+                            ${cargadas} de ${misFotos.length} cargadas
+                            ${fallidas > 0 ? `(${fallidas} fallidas)` : ''}
+                        </small>
+                    `;
+                    
+                    // Si todas cargaron o fallaron, quitar el mensaje
+                    if (cargadas + fallidas === misFotos.length) {
+                        setTimeout(() => {
+                            if (loadingText) loadingText.style.display = 'none';
+                        }, 1000);
+                    }
+                }
+            }
+            
+            // Cargar imágenes UNA POR UNA con delay de 500ms entre cada una
+            async function cargarTodas() {
+                for (let i = 0; i < misFotos.length; i++) {
+                    await cargarImagen(misFotos[i], i);
+                    // Esperar 500ms antes de cargar la siguiente (evita límites de GitHub)
+                    if (i < misFotos.length - 1) {
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+                }
+                console.log('Carga completada. Éxitos: ' + cargadas + ', Fallidas: ' + fallidas);
+            }
+            
+            // Iniciar carga
+            setTimeout(cargarTodas, 1000);
         });
     </script>
 </body>
